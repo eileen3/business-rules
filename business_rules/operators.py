@@ -111,6 +111,10 @@ class NumericType(BaseType):
             return Decimal(value)
         if isinstance(value, Decimal):
             return value
+        # Is a threshold
+        if isinstance(value, list) and len(value) == 2:
+            return [NumericType._assert_valid_value_and_cast(value[0]),
+                    NumericType._assert_valid_value_and_cast(value[1])]
         else:
             raise AssertionError("{0} is not a valid numeric type.".
                                  format(value))
@@ -134,6 +138,15 @@ class NumericType(BaseType):
     @type_operator(FIELD_NUMERIC)
     def less_than_or_equal_to(self, other_numeric):
         return self.less_than(other_numeric) or self.equal_to(other_numeric)
+
+    @type_operator(FIELD_NUMERIC)
+    def within(self, threshold):
+        return (self.greater_than_or_equal_to(threshold[0])
+                and self.less_than_or_equal_to(threshold[1]))
+
+    @type_operator(FIELD_NUMERIC)
+    def not_within(self, threshold):
+        return self.less_than(threshold[0]) or self.greater_than(threshold[1])
 
 
 @export_type

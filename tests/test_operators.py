@@ -116,6 +116,17 @@ class NumericOperatorTests(TestCase):
         self.assertTrue(NumericType(10).less_than_or_equal_to(10.000002))
         self.assertTrue(NumericType(10).less_than_or_equal_to(10))
 
+    def test_numeric_within(self):
+        self.assertTrue(NumericType(1).within([0, 2]))
+        self.assertFalse(NumericType(4).within([5, 6]))
+        self.assertTrue(NumericType(10).within([10, 11]))
+
+    def test_numeric_not_within(self):
+        self.assertTrue(NumericType(1).not_within([2, 3]))
+        self.assertTrue(NumericType(10).not_within([4, 7]))
+        self.assertFalse(NumericType(10).not_within([1, 10]))
+        self.assertFalse(NumericType(10).not_within([10, 15]))
+
 
 class BooleanOperatorTests(TestCase):
 
