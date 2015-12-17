@@ -111,6 +111,10 @@ class NumericType(BaseType):
             return Decimal(value)
         if isinstance(value, Decimal):
             return value
+        # Is a threshold
+        if isinstance(value, list) and len(value) == 2:
+            return [NumericType._assert_valid_value_and_cast(value[0]),
+                    NumericType._assert_valid_value_and_cast(value[1])]
         else:
             raise AssertionError("{0} is not a valid numeric type.".
                                  format(value))
